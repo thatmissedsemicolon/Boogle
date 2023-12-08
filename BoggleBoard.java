@@ -3,49 +3,118 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class BoggleBoard extends JPanel {
-    private static final char[][] LETTERS = {
-        { 'A', 'B', 'C', 'D' },
-        { 'E', 'F', 'G', 'H' },
-        { 'I', 'J', 'K', 'L' },
-        { 'M', 'N', 'O', 'P' },
-        { 'Q', 'R', 'S', 'T' },
-        { 'U', 'V', 'W', 'X' },
+    private static final int NUM_ROWS = 4;
+    private static final int NUM_COLS = 4;
+
+    private char[][] LETTERS = {
+        {'A', 'B', 'C', 'D'},
+        {'E', 'F', 'G', 'H'},
+        {'I', 'J', 'K', 'L'},
+        {'M', 'N', 'O', 'P'},
+        {'Q', 'R', 'S', 'T'},
+        {'U', 'V', 'W', 'X'},
+        {'Y', 'Z'}
     };
 
     private StringBuilder currentWord = new StringBuilder();
 
-    // BoggleBoard constructor
+     // BoggleBoard constructor
     public BoggleBoard(JLabel currentWordDisplay) {
-        setLayout(new GridLayout(6, 4));
+        setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
         generateBoard(currentWordDisplay);
     }
 
-    // generate board -- modify to accomodate randomized letters *
-    private void generateBoard(JLabel currentWordDisplay) {
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 4; col++) {
-                char letter = LETTERS[row][col];
-                JLabel label = new JLabel(Character.toString(letter), SwingConstants.CENTER);
-                label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                label.addMouseListener(new LetterClickListener(currentWordDisplay));
-                add(label);
+    private void shuffleLetters() {
+        List<Character> lettersList = Arrays.asList(
+            'A', 'B', 'C', 'D', 
+            'E', 'F', 'G', 'H', 
+            'I', 'J', 'K', 'L', 
+            'M', 'N', 'O', 'P',
+            'Q', 'R', 'S', 'T',
+            'U', 'V', 'W', 'X',
+            'Y', 'Z'
+        );
+        Collections.shuffle(lettersList);
+
+        int index = 0;
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                LETTERS[row][col] = lettersList.get(index++);
             }
         }
     }
 
+    public void rotateLettersClockwise() {
+        char[][] rotatedLetters = new char[NUM_COLS][NUM_ROWS];
+
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                rotatedLetters[col][NUM_ROWS - 1 - row] = LETTERS[row][col];
+            }
+        }
+
+        LETTERS = rotatedLetters;
+        updateBoard();
+    }
+
+    public void rotateLettersCounterClockwise() {
+        char[][] rotatedLetters = new char[NUM_COLS][NUM_ROWS];
+
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                rotatedLetters[NUM_COLS - 1 - col][row] = LETTERS[row][col];
+            }
+        }
+
+        LETTERS = rotatedLetters;
+        updateBoard();
+    }
+
+    private void updateBoard() {
+        removeAll();
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                char letter = LETTERS[row][col];
+                JLabel label = new JLabel(Character.toString(letter), SwingConstants.CENTER);
+                label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                label.addMouseListener(new LetterClickListener());
+                add(label);
+            }
+        }
+        revalidate();
+        repaint();
+    }
+
+    // generate board -- modify to accomodate randomized letters *
+    private void generateBoard(JLabel currentWordDisplay) {
+        shuffleLetters();
+        updateBoard();
+        for (Component component : getComponents()) {
+            JLabel label = (JLabel) component;
+            label.addMouseListener(new LetterClickListener(currentWordDisplay));
+        }
+    }
+
     // inner class -- handle mouse clicks on letters
-    public class LetterClickListener extends MouseAdapter {
+    class LetterClickListener extends MouseAdapter {
         private JLabel currentWordDisplay;
+
+        public LetterClickListener() {
+
+        }
 
         // constructor
         public LetterClickListener(JLabel currentWordDisplay) {
             this.currentWordDisplay = currentWordDisplay;
         }
 
-        @Override
         // mouse click event handling
+        @Override
         public void mouseClicked(MouseEvent e) {
             JLabel label = (JLabel) e.getSource();
 
@@ -57,7 +126,9 @@ public class BoggleBoard extends JPanel {
             // append the licked letter to the current word
             currentWord.append(label.getText());
             label.setEnabled(false);
-            label.setForeground(Color.BLUE); // change color to show that a letter has been previously clicked
+            label.setForeground(Color.BLUE);
+
+            rotateLettersClockwise(); // Rotate letters when clicked
 
             // display the current word on the GUI
             this.currentWordDisplay.setText("Current Word: " + currentWord.toString());
@@ -67,10 +138,12 @@ public class BoggleBoard extends JPanel {
     // reset board and clear words
     public void resetBoard() {
         for (Component component : getComponents()) {
-            JLabel label = (JLabel) component;
-            label.setForeground(Color.BLACK); // Reset the letter color
-            label.setEnabled(true);
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                label.setForeground(Color.BLACK);
+                label.setEnabled(true);
+            }
         }
-        this.currentWord.setLength(0);
+        currentWord.setLength(0);
     }
 }

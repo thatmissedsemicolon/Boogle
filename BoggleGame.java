@@ -59,10 +59,15 @@ public class BoggleGame extends JFrame {
         JButton resetButton = new JButton("Reset Game");
         resetButton.addActionListener(e -> resetGame());
 
+        // "Submit Word" and "Game Reset" buttons
+        JButton rotateButton = new JButton("Rotate Word");
+        rotateButton.addActionListener(e -> boggleBoard.rotateLettersClockwise());
+
         // button panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(submitButton);
         buttonPanel.add(resetButton);
+        buttonPanel.add(rotateButton);
 
         add(buttonPanel, BorderLayout.NORTH);
 

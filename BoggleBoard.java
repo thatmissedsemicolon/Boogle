@@ -82,12 +82,13 @@ public class BoggleBoard extends JPanel {
                 char letter = LETTERS[row][col];
                 JLabel label = new JLabel(Character.toString(letter), SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                label.addMouseListener(new LetterClickListener(BoggleGame.currentWordDisplay));
                 add(label);
             }
         }
         revalidate();
         repaint();
-    }
+    }    
 
     // generate board -- modify to accomodate randomized letters *
     private void generateBoard(JLabel currentWordDisplay) {

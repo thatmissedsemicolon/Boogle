@@ -19,7 +19,7 @@ public class BoggleGame extends JFrame {
     private Timer gameTimer;
     private BoggleBoard boggleBoard;
 
-    private JLabel currentWordDisplay;
+    public static JLabel currentWordDisplay;
     private JLabel scoreLabel = new JLabel();
     private JTextField inputField;
     private static JLabel highestScorerLabel = new JLabel();
@@ -31,7 +31,7 @@ public class BoggleGame extends JFrame {
         setTitle("Boggle Game");
 
         // initialize GUI componentss
-        this.currentWordDisplay = new JLabel("Current Word: ");
+        currentWordDisplay = new JLabel("Current Word: ");
         currentWordDisplay.setForeground(Color.BLACK);
         add(currentWordDisplay, BorderLayout.SOUTH);
 
@@ -128,7 +128,7 @@ public class BoggleGame extends JFrame {
             this.usedWordsArray[usedWordsCount++] = currentWord;
 
             this.boggleBoard.resetBoard();
-            this.currentWordDisplay.setText("Current Word: ");
+            currentWordDisplay.setText("Current Word: ");
         } else {
             if (wordAlreadyUsed) {
                 JOptionPane.showMessageDialog(this, "Word already used!");
@@ -137,7 +137,7 @@ public class BoggleGame extends JFrame {
             }
 
             this.boggleBoard.resetBoard();
-            this.currentWordDisplay.setText("Current Word: ");
+            currentWordDisplay.setText("Current Word: ");
         }
 
         // Clear the input field after submitting a word
@@ -173,7 +173,7 @@ public class BoggleGame extends JFrame {
 
     private void resetGame() {
         this.boggleBoard.resetBoard();
-        this.currentWordDisplay.setText("Current Word: ");
+        currentWordDisplay.setText("Current Word: ");
         this.remainingSeconds = GAME_DURATION_SECONDS;
         this.score = 0;
     

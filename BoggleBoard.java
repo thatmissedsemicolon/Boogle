@@ -82,7 +82,6 @@ public class BoggleBoard extends JPanel {
                 char letter = LETTERS[row][col];
                 JLabel label = new JLabel(Character.toString(letter), SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                label.addMouseListener(new LetterClickListener());
                 add(label);
             }
         }
@@ -104,10 +103,6 @@ public class BoggleBoard extends JPanel {
     class LetterClickListener extends MouseAdapter {
         private JLabel currentWordDisplay;
 
-        public LetterClickListener() {
-
-        }
-
         // constructor
         public LetterClickListener(JLabel currentWordDisplay) {
             this.currentWordDisplay = currentWordDisplay;
@@ -127,8 +122,6 @@ public class BoggleBoard extends JPanel {
             currentWord.append(label.getText());
             label.setEnabled(false);
             label.setForeground(Color.BLUE);
-
-            rotateLettersClockwise(); // Rotate letters when clicked
 
             // display the current word on the GUI
             this.currentWordDisplay.setText("Current Word: " + currentWord.toString());

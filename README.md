@@ -1,4 +1,4 @@
-# bogglegame
+# Boggle Game
 
 Alan Castillo, Crystal Sheppard
 

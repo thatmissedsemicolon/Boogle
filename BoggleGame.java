@@ -61,7 +61,7 @@ public class BoggleGame extends JFrame {
         resetButton.addActionListener(e -> resetGame());
 
         // "Submit Word" and "Game Reset" buttons
-        JButton rotateButton = new JButton("Rotate Word");
+        JButton rotateButton = new JButton("Rotate");
         rotateButton.addActionListener(e -> boggleBoard.rotateLettersClockwise());
 
         // button panel
@@ -116,7 +116,7 @@ public class BoggleGame extends JFrame {
             currentWord = currentWord.substring("Current Word: ".length()).trim();
         }
 
-        
+
         boolean wordExists = isWordInDictionary(currentWord, dictionaryFileName);
         boolean wordAlreadyUsed = isWordUsed(currentWord);
 

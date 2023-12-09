@@ -30,16 +30,16 @@ public class BoggleBoard extends JPanel {
         setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
 
         if (lang.equalsIgnoreCase("Spanish")) {
-            char[][] newLetters = new char[LETTERS.length + 1][4]; // Create a new array with an additional row
+            char[][] newLetters = new char[LETTERS.length + 1][4];
 
-            // Copy existing letters to the new array
+            // Coping existing letters to the new array
             for (int i = 0; i < LETTERS.length; i++) {
                 for (int j = 0; j < LETTERS[i].length; j++) {
                     newLetters[i][j] = LETTERS[i][j];
                 }
             }
             
-            // Add 'Ñ' to the last row
+            // Adding 'Ñ' to the last row
             newLetters[LETTERS.length] = new char[] {'Ñ', '1', '2', '3'};
             
             // Assign the new array back to LETTERS

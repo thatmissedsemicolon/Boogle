@@ -64,6 +64,20 @@ public class BoggleBoard extends JPanel {
         updateBoard();
     }
 
+    // rotates the letter counter-clockwise
+    public void rotateLettersCounterClockwise() {
+        char[][] rotatedLetters = new char[NUM_COLS][NUM_ROWS];
+
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                rotatedLetters[NUM_COLS - 1 - col][row] = LETTERS[row][col];
+            }
+        }
+
+        LETTERS = rotatedLetters;
+        updateBoard();
+    }
+
     // updates the board
     private void updateBoard() {
         removeAll();

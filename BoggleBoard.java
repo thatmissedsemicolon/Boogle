@@ -11,7 +11,7 @@ public class BoggleBoard extends JPanel {
     private static final int NUM_ROWS = 4;
     private static final int NUM_COLS = 4;
 
-    private char[][] LETTERS = {
+    private char[][] ELETTERS = {
         {'A', 'B', 'C', 'D'},
         {'E', 'F', 'G', 'H'},
         {'I', 'J', 'K', 'L'},
@@ -19,6 +19,17 @@ public class BoggleBoard extends JPanel {
         {'Q', 'R', 'S', 'T'},
         {'U', 'V', 'W', 'X'},
         {'Y', 'Z'}
+    };
+
+    private String[][] SLETERS = {
+        {"A", "B", "C", "D"},
+        {"E", "F", "G", "H"},
+        {"I", "J", "K", "L"},
+        {"M", "N", "O", "P"},
+        {"Q", "R", "S", "T"},
+        {"U", "V", "W", "X"},
+        {"Y", "Z", "Ch", "Qu"},
+        {"Ñ"}
     };
 
     private StringBuilder currentWord = new StringBuilder();
@@ -45,7 +56,7 @@ public class BoggleBoard extends JPanel {
         int index = 0;
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                LETTERS[row][col] = lettersList.get(index++);
+                ELETTERS[row][col] = lettersList.get(index++);
             }
         }
     }
@@ -56,11 +67,25 @@ public class BoggleBoard extends JPanel {
 
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                rotatedLetters[col][NUM_ROWS - 1 - row] = LETTERS[row][col];
+                rotatedLetters[col][NUM_ROWS - 1 - row] = ELETTERS[row][col];
             }
         }
 
-        LETTERS = rotatedLetters;
+        ELETTERS = rotatedLetters;
+        updateBoard();
+    }
+
+    // rotates the letter counter-clockwise
+    public void rotateLettersCounterClockwise() {
+        char[][] rotatedLetters = new char[NUM_COLS][NUM_ROWS];
+
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLS; col++) {
+                rotatedLetters[NUM_COLS - 1 - col][row] = ELETTERS[row][col];
+            }
+        }
+
+        ELETTERS = rotatedLetters;
         updateBoard();
     }
 
@@ -69,7 +94,7 @@ public class BoggleBoard extends JPanel {
         removeAll();
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                char letter = LETTERS[row][col];
+                char letter = ELETTERS[row][col];
                 JLabel label = new JLabel(Character.toString(letter), SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 label.addMouseListener(new LetterClickListener(BoggleGame.currentWordDisplay));

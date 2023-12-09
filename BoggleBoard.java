@@ -30,8 +30,7 @@ public class BoggleBoard extends JPanel {
                 {"M", "N", "O", "P"},
                 {"Q", "R", "S", "T"},
                 {"U", "V", "W", "X"},
-                {"Y", "Z", "h", "u"},
-                {"Ñ"}
+                {"Y", "Z", "Ñ"}
             };
 
             LETTERS = convertToChar(SLETERS);

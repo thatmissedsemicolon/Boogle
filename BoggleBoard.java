@@ -3,75 +3,103 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class BoggleBoard extends JPanel {
     private static final int NUM_ROWS = 4;
     private static final int NUM_COLS = 4;
 
-    private char[][] ELETTERS = {
-        {'A', 'B', 'C', 'D'},
-        {'E', 'F', 'G', 'H'},
-        {'I', 'J', 'K', 'L'},
-        {'M', 'N', 'O', 'P'},
-        {'Q', 'R', 'S', 'T'},
-        {'U', 'V', 'W', 'X'},
-        {'Y', 'Z'}
-    };
-
-    private String[][] SLETERS = {
-        {"A", "B", "C", "D"},
-        {"E", "F", "G", "H"},
-        {"I", "J", "K", "L"},
-        {"M", "N", "O", "P"},
-        {"Q", "R", "S", "T"},
-        {"U", "V", "W", "X"},
-        {"Y", "Z", "Ch", "Qu"},
-        {"Ñ"}
-    };
+    private char[][] LETTERS; // English letters
+    private String[][] SLETERS; // Spanish letters
 
     private StringBuilder currentWord = new StringBuilder();
 
-     // BoggleBoard constructor
-    public BoggleBoard(JLabel currentWordDisplay) {
+    // BoggleBoard constructor
+    public BoggleBoard(JLabel currentWordDisplay, String lang) {
         setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
+
+        if (lang.equalsIgnoreCase("Spanish")) {
+            SLETERS = new String[][]{
+                {"A", "B", "C", "D"},
+                {"E", "F", "G", "H"},
+                {"I", "J", "K", "L"},
+                {"M", "N", "O", "P"},
+                {"Q", "R", "S", "T"},
+                {"U", "V", "W", "X"},
+                {"Y", "Z", "h", "u"},
+                {"Ñ"}
+            };
+
+            LETTERS = convertToChar(SLETERS);
+        } else {
+            LETTERS = new char[][]{
+                {'A', 'B', 'C', 'D'},
+                {'E', 'F', 'G', 'H'},
+                {'I', 'J', 'K', 'L'},
+                {'M', 'N', 'O', 'P'},
+                {'Q', 'R', 'S', 'T'},
+                {'U', 'V', 'W', 'X'},
+                {'Y', 'Z'}
+            };
+        }
+
         generateBoard(currentWordDisplay);
+    }
+
+    // converts String to Char
+    private char[][] convertToChar(String[][] letters) {
+        char[][] convertedLetters = new char[letters.length][];
+        for (int i = 0; i < letters.length; i++) {
+            convertedLetters[i] = new char[letters[i].length];
+            for (int j = 0; j < letters[i].length; j++) {
+                convertedLetters[i][j] = letters[i][j].charAt(0);
+            }
+        }
+        
+        return convertedLetters;
     }
 
     // shuffles the letters (randomize)
     private void shuffleLetters() {
-        List<Character> lettersList = Arrays.asList(
-            'A', 'B', 'C', 'D', 
-            'E', 'F', 'G', 'H', 
-            'I', 'J', 'K', 'L', 
-            'M', 'N', 'O', 'P',
-            'Q', 'R', 'S', 'T',
-            'U', 'V', 'W', 'X',
-            'Y', 'Z'
-        );
-        Collections.shuffle(lettersList);
-
+        Set<Character> uniqueCharacters = new HashSet<>();
+    
+        // Collect unique characters from LETTERS array
+        for (char[] row : LETTERS) {
+            for (char letter : row) {
+                uniqueCharacters.add(letter);
+            }
+        }
+    
+        // Create a list with each character appearing exactly once
+        List<Character> charactersList = new ArrayList<>(uniqueCharacters);
+    
+        // Shuffle the list
+        Collections.shuffle(charactersList);
+    
+        // Assign shuffled characters back to LETTERS array
         int index = 0;
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                ELETTERS[row][col] = lettersList.get(index++);
+                LETTERS[row][col] = charactersList.get(index++);
             }
         }
-    }
-
+    }           
+   
     // rotates the letter clockwise
     public void rotateLettersClockwise() {
         char[][] rotatedLetters = new char[NUM_COLS][NUM_ROWS];
 
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                rotatedLetters[col][NUM_ROWS - 1 - row] = ELETTERS[row][col];
+                rotatedLetters[col][NUM_ROWS - 1 - row] = LETTERS[row][col];
             }
         }
 
-        ELETTERS = rotatedLetters;
+        LETTERS = rotatedLetters;
         updateBoard();
     }
 
@@ -81,11 +109,11 @@ public class BoggleBoard extends JPanel {
 
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                rotatedLetters[NUM_COLS - 1 - col][row] = ELETTERS[row][col];
+                rotatedLetters[NUM_COLS - 1 - col][row] = LETTERS[row][col];
             }
         }
 
-        ELETTERS = rotatedLetters;
+        LETTERS = rotatedLetters;
         updateBoard();
     }
 
@@ -94,7 +122,7 @@ public class BoggleBoard extends JPanel {
         removeAll();
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                char letter = ELETTERS[row][col];
+                char letter = LETTERS[row][col];
                 JLabel label = new JLabel(Character.toString(letter), SwingConstants.CENTER);
                 label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 label.addMouseListener(new LetterClickListener(BoggleGame.currentWordDisplay));

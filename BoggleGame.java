@@ -15,6 +15,7 @@ public class BoggleGame extends JFrame {
     private static final int GAME_DURATION_SECONDS = 180; // 3-minute game
     private int remainingSeconds;
     private static String userName = "";
+    public static String lang = "";
 
     private Timer gameTimer;
     private BoggleBoard boggleBoard;
@@ -26,7 +27,7 @@ public class BoggleGame extends JFrame {
     private static JButton playButton, rulesButton, exitButton;
     private static JFrame menuFrame;
 
-    public BoggleGame() {
+    public BoggleGame(String l) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Boggle Game");
 
@@ -35,7 +36,7 @@ public class BoggleGame extends JFrame {
         currentWordDisplay.setForeground(Color.BLACK);
         add(currentWordDisplay, BorderLayout.SOUTH);
 
-        boggleBoard = new BoggleBoard(currentWordDisplay);
+        boggleBoard = new BoggleBoard(currentWordDisplay, lang);
         inputField = new JTextField();
 
         // create letter click listener
@@ -54,17 +55,15 @@ public class BoggleGame extends JFrame {
 
         // "Submit Word" and "Game Reset" buttons
         JButton submitButton = new JButton("Submit Word");
-        submitButton.addActionListener(e -> handleWordSubmission(currentWordDisplay.getText(), "BoggleDictionary_CSW21.txt"));
+        submitButton.addActionListener(e -> handleWordSubmission(currentWordDisplay.getText(), lang == "English" ? "BoggleDictionary_CSW21.txt" : "SpanishBoggleWords.txt"));
 
         JButton resetButton = new JButton("Reset Game");
         resetButton.addActionListener(e -> resetGame());
 
         // "Submit Word" and "Game Reset" buttons
-        JButton rotateButton = new JButton("Rotate");
+        JButton rotateButton = new JButton("Rotate Word");
         rotateButton.addActionListener(e -> boggleBoard.rotateLettersClockwise());
 
-
-        
         // button panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(submitButton);
@@ -98,6 +97,7 @@ public class BoggleGame extends JFrame {
         this.gameTimer.start();
 
         // set up frame
+        this.setPreferredSize(new Dimension(600, 400));
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -226,36 +226,52 @@ public class BoggleGame extends JFrame {
             );
             
         if (playAgain == JOptionPane.YES_OPTION) {
-            SwingUtilities.invokeLater(() -> new BoggleGame());
+            getUserLang();
         }
         else {
             System.exit(0);
         }
     }
 
+    // gets user lang preference to play the game
+    private static void getUserLang() {
+        String[] options = { "English", "Spanish" };
+        int choice = JOptionPane.showOptionDialog(null, "Select the language preference", "Language Preference", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+    
+        if (choice == JOptionPane.CLOSED_OPTION) {
+            SwingUtilities.invokeLater(() -> startMenu());
+        } else {
+            String selectedLanguage = options[choice];
+            lang = selectedLanguage;
+
+            if (!selectedLanguage.isEmpty()) {
+                getUserName();
+            }
+        }
+    }    
+
     // gets user name
     private static void getUserName() {
-        while (userName.isEmpty()) {
-            userName = JOptionPane.showInputDialog(null, "Please enter your name:");
+        while (userName == null || userName.trim().isEmpty()) {
+            userName = JOptionPane.showInputDialog(null, "Please enter your name:", "Player Name", JOptionPane.DEFAULT_OPTION);
             if (userName == null) {
                 SwingUtilities.invokeLater(() -> startMenu());
                 break;
             } else if (userName.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please enter a valid name.");
-                userName = "";
             }
         }
     
         // Start the game if a valid name is provided
-        if (!userName.isEmpty()) {
-            SwingUtilities.invokeLater(() -> new BoggleGame());
+        if (userName != null && !userName.isEmpty()) {
+            SwingUtilities.invokeLater(() -> new BoggleGame(lang));
         }
-    }    
+    }        
 
     private static class playButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             menuFrame.dispose();
-            getUserName();
+            getUserLang();
         }
     }
 

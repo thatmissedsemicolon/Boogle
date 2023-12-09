@@ -13,8 +13,15 @@ public class BoggleBoard extends JPanel {
     private static final int NUM_ROWS = 4;
     private static final int NUM_COLS = 4;
 
-    private char[][] LETTERS; // English letters
-    private String[][] SLETERS; // Spanish letters
+    private char[][] LETTERS = new char[][]{
+                {'A', 'B', 'C', 'D'},
+                {'E', 'F', 'G', 'H'},
+                {'I', 'J', 'K', 'L'},
+                {'M', 'N', 'O', 'P'},
+                {'Q', 'R', 'S', 'T'},
+                {'U', 'V', 'W', 'X'},
+                {'Y', 'Z'}
+            }; // English letters
 
     private StringBuilder currentWord = new StringBuilder();
 
@@ -23,44 +30,10 @@ public class BoggleBoard extends JPanel {
         setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
 
         if (lang.equalsIgnoreCase("Spanish")) {
-            SLETERS = new String[][]{
-                {"A", "B", "C", "D"},
-                {"E", "F", "G", "H"},
-                {"I", "J", "K", "L"},
-                {"M", "N", "O", "P"},
-                {"Q", "R", "S", "T"},
-                {"U", "V", "W", "X"},
-                {"Y", "Z", "h", "u"},
-                {"Ñ"}
-            };
-
-            LETTERS = convertToChar(SLETERS);
-        } else {
-            LETTERS = new char[][]{
-                {'A', 'B', 'C', 'D'},
-                {'E', 'F', 'G', 'H'},
-                {'I', 'J', 'K', 'L'},
-                {'M', 'N', 'O', 'P'},
-                {'Q', 'R', 'S', 'T'},
-                {'U', 'V', 'W', 'X'},
-                {'Y', 'Z'}
-            };
+            LETTERS[][]
         }
 
         generateBoard(currentWordDisplay);
-    }
-
-    // converts String to Char
-    private char[][] convertToChar(String[][] letters) {
-        char[][] convertedLetters = new char[letters.length][];
-        for (int i = 0; i < letters.length; i++) {
-            convertedLetters[i] = new char[letters[i].length];
-            for (int j = 0; j < letters[i].length; j++) {
-                convertedLetters[i][j] = letters[i][j].charAt(0);
-            }
-        }
-        
-        return convertedLetters;
     }
 
     // shuffles the letters (randomize)

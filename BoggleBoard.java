@@ -225,5 +225,7 @@ public class BoggleBoard extends JPanel {
             }
         }
         currentWord.setLength(0);
-    }
+        selectedRow = -1;
+        selectedCol = -1;
+    }    
 }

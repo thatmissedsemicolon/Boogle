@@ -55,7 +55,7 @@ public class BoggleGame extends JFrame {
         // "Submit Word" and "Game Reset" buttons
         JButton submitButton = new JButton("Submit Word");
         submitButton.addActionListener(
-                e -> handleWordSubmission(currentWordDisplay.getText(), "BoggleDictionary_CSW21.txt"));
+                e -> handleWordSubmission(currentWordDisplay.getText(), "EnglishBoggleWords.txt"));
 
         JButton resetButton = new JButton("Reset Game");
         resetButton.addActionListener(e -> resetGame());

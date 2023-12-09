@@ -25,6 +25,7 @@ public class BoggleBoard extends JPanel {
 
     private StringBuilder currentWord = new StringBuilder();
 
+    
     // BoggleBoard constructor
     public BoggleBoard(JLabel currentWordDisplay, String lang) {
         setLayout(new GridLayout(NUM_ROWS, NUM_COLS));

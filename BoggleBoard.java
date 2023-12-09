@@ -13,8 +13,10 @@ public class BoggleBoard extends JPanel {
     private static final int NUM_ROWS = 4;
     private static final int NUM_COLS = 4;
 
-    private char[][] LETTERS; // English letters
-    private String[][] SLETERS; // Spanish letters
+    private char[][] LETTERS;   // English letters
+    private String[][] SLETERS;   // Spanish letters
+    private int selectedRow = -1;
+    private int selectedCol = -1;
 
     private StringBuilder currentWord = new StringBuilder();
 
@@ -30,7 +32,7 @@ public class BoggleBoard extends JPanel {
                 {"M", "N", "O", "P"},
                 {"Q", "R", "S", "T"},
                 {"U", "V", "W", "X"},
-                {"Y", "Z", "Ñ"}
+                {"Y", "Z", "Ñ"},
             };
 
             LETTERS = convertToChar(SLETERS);
@@ -161,13 +163,55 @@ public class BoggleBoard extends JPanel {
                 return;
             }
 
-            // append the licked letter to the current word
-            currentWord.append(label.getText());
-            label.setEnabled(false);
-            label.setForeground(Color.BLUE);
+            char selectedLetter = label.getText().charAt(0);
 
-            // display the current word on the GUI
-            this.currentWordDisplay.setText("Current Word: " + currentWord.toString());
+            if (isValidSelection(selectedLetter, label)) {
+                currentWord.append(label.getText());
+                label.setEnabled(false);
+                label.setForeground(Color.BLUE);
+                this.currentWordDisplay.setText("Current Word: " + currentWord.toString());
+
+                selectedRow = getRowOfLabel(label);
+                selectedCol = getColOfLabel(label);
+            }
+        }
+
+        private boolean isValidSelection(char selectedLetter, JLabel label) {
+            int currentRow = getRowOfLabel(label);
+            int currentCol = getColOfLabel(label);
+
+            if (selectedRow == -1 || selectedCol == -1) {
+                return true;
+            } 
+
+            return isAdjacent(selectedRow, selectedCol, currentRow, currentCol);
+        }
+
+        private boolean isAdjacent(int row1, int col1, int row2, int col2) {
+            int rowDiff = Math.abs(row1 - row2);
+            int colDiff = Math.abs(col1 - col2);
+    
+            return (rowDiff <= 1 && colDiff <= 1) && (rowDiff + colDiff > 0);
+        }
+
+        private int getRowOfLabel(JLabel label) {
+            Component[] components = getComponents();
+            for (int i = 0; i < components.length; i++) {
+                if (components[i] == label) {
+                    return i / NUM_COLS;
+                }
+            }
+            return -1;
+        }
+
+        private int getColOfLabel(JLabel label) {
+            Component[] components = getComponents();
+            for (int i = 0; i < components.length; i++) {
+                if (components[i] == label) {
+                    return i % NUM_COLS;
+                }
+            }
+            return -1;
         }
     }
 

@@ -116,6 +116,7 @@ public class BoggleGame extends JFrame {
             currentWord = currentWord.substring("Current Word: ".length()).trim();
         }
 
+        
         boolean wordExists = isWordInDictionary(currentWord, dictionaryFileName);
         boolean wordAlreadyUsed = isWordUsed(currentWord);
 

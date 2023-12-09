@@ -54,7 +54,8 @@ public class BoggleGame extends JFrame {
 
         // "Submit Word" and "Game Reset" buttons
         JButton submitButton = new JButton("Submit Word");
-        submitButton.addActionListener(e -> handleWordSubmission(currentWordDisplay.getText(), "BoggleDictionary_CSW21.txt"));
+        submitButton.addActionListener(
+                e -> handleWordSubmission(currentWordDisplay.getText(), "BoggleDictionary_CSW21.txt"));
 
         JButton resetButton = new JButton("Reset Game");
         resetButton.addActionListener(e -> resetGame());
@@ -120,8 +121,9 @@ public class BoggleGame extends JFrame {
 
         if (wordExists && !wordAlreadyUsed) {
             // Increase the score by the length of the word
-            int wordLength = currentWord.length(); // Extract the word length
-            this.score += wordLength;
+            int wordScore = calculateWordScore(currentWord.length());
+
+            this.score += wordScore;
             this.scoreLabel.setText("Score: " + score);
 
             // Store the word in the usedWords stack
@@ -144,6 +146,22 @@ public class BoggleGame extends JFrame {
         this.inputField.setText("");
     }
 
+    // calculate the word length score
+    private int calculateWordScore(int wordLength) {
+        if (wordLength >= 3 && wordLength <= 4)
+            return 1; // 3-4-letter words are worth 1 point
+        else if (wordLength == 5)
+            return 2; // 5-letter words are worth 2 points
+        else if (wordLength == 6)
+            return 3; // 6-letter words are worth 3 points
+        else if (wordLength == 7)
+            return 5; // 7-letter words are worth 5 points
+        else if (wordLength >= 8)
+            return 11; // words of 8+ letters are worth 11 points
+        else
+            return 0;
+    }
+
     // checks for the word if its already used
     private boolean isWordUsed(String word) {
         // Check if the word is already in the usedWordsArray
@@ -155,7 +173,7 @@ public class BoggleGame extends JFrame {
         return false;
     }
 
-    // checks for the word in the Boggle Dictionary 
+    // checks for the word in the Boggle Dictionary
     private boolean isWordInDictionary(String word, String dictionaryFileName) {
         boolean wordExists = false;
 
@@ -179,10 +197,10 @@ public class BoggleGame extends JFrame {
         currentWordDisplay.setText("Current Word: ");
         this.remainingSeconds = GAME_DURATION_SECONDS;
         this.score = 0;
-    
+
         // Reset the score level
         this.scoreLabel.setText("Score: " + score);
-    
+
         // Reset used words array and count
         this.usedWordsArray = new String[100];
         this.usedWordsCount = 0;
@@ -195,16 +213,13 @@ public class BoggleGame extends JFrame {
     private void handleGameEnd() {
         ScoreManager.updateScore(userName, score);
 
-        int playAgain = JOptionPane.showConfirmDialog
-            (null,
+        int playAgain = JOptionPane.showConfirmDialog(null,
                 "Final Score: " + score + "\nPlay again?",
-                "Game Over! Time's up.", JOptionPane.YES_NO_OPTION
-            );
-            
+                "Game Over! Time's up.", JOptionPane.YES_NO_OPTION);
+
         if (playAgain == JOptionPane.YES_OPTION) {
             SwingUtilities.invokeLater(() -> new BoggleGame());
-        }
-        else {
+        } else {
             System.exit(0);
         }
     }
@@ -221,12 +236,12 @@ public class BoggleGame extends JFrame {
                 userName = "";
             }
         }
-    
+
         // Start the game if a valid name is provided
         if (!userName.isEmpty()) {
             SwingUtilities.invokeLater(() -> new BoggleGame());
         }
-    }    
+    }
 
     private static class playButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -289,25 +304,32 @@ public class BoggleGame extends JFrame {
     private static void displayRules(JFrame mainMenuFrame) {
         String rulesText = "RULES:\n\n(from https://www.wordplays.com/boggle)\n\n" +
                 "Boggle is a word game that requires 16 letter cubes similar to dice, but with letters. " +
-                "The Boggle grid has a dome so when you shake the game the dice are not lost and can easily fall into the grid. " +
+                "The Boggle grid has a dome so when you shake the game the dice are not lost and can easily fall into the grid. "
+                +
                 "A sand timer accompanies the game, so players have 3 minutes to find as many words as possible. " +
                 "You must have a minimum of two players to play.\n\n" +
-    
-                "The goal of the game is to have the highest point total. To gain points, players must create words from the randomly assorted letters in the cube grid. " +
+
+                "The goal of the game is to have the highest point total. To gain points, players must create words from the randomly assorted letters in the cube grid. "
+                +
                 "The longer the word, the higher the point value of the word, according to Boggle rules.\n\n" +
-    
-                "Boggle is a game involving the creation of as many words as possible from special dice in a specified time limit, and involves two players or more.\n" +
-                "- Boggle generally features sixteen cubes or dice that have a single letter on each face, with the exception of ‘Q’, which is combined with the letter ‘U’ as ‘Qu’; as well as a container and lid, designed to hold the dice in place.\n" +
-                "- The typical aim of Boggle is to find words within the letter arrangements that sit next to each other on the dice, which are randomized each round by shaking the container.\n" +
-                "- Each Boggle player writes the words they find on their own piece of paper, and they are read aloud when time is up, which is usually three minutes on the timer.\n" +
-                "- Points are scored in Boggle according to the word length – generally those three to four letters in length score one point, with words eight or more letters in length scoring eleven points, while words found by multiple players are generally considered null and have a point value of zero.\n" +
+
+                "Boggle is a game involving the creation of as many words as possible from special dice in a specified time limit, and involves two players or more.\n"
+                +
+                "- Boggle generally features sixteen cubes or dice that have a single letter on each face, with the exception of ‘Q’, which is combined with the letter ‘U’ as ‘Qu’; as well as a container and lid, designed to hold the dice in place.\n"
+                +
+                "- The typical aim of Boggle is to find words within the letter arrangements that sit next to each other on the dice, which are randomized each round by shaking the container.\n"
+                +
+                "- Each Boggle player writes the words they find on their own piece of paper, and they are read aloud when time is up, which is usually three minutes on the timer.\n"
+                +
+                "- Points are scored in Boggle according to the word length – generally those three to four letters in length score one point, with words eight or more letters in length scoring eleven points, while words found by multiple players are generally considered null and have a point value of zero.\n"
+                +
                 "- While each player reads the words they discovered, the other players check their lists for the same words, crossing them off if they match. The points are allocated to each player if they have a unique word.";
-    
+
         JTextArea textArea = new JTextArea(rulesText);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-    
+
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setPreferredSize(new Dimension(500, 400));
         JOptionPane.showMessageDialog(menuFrame, scrollPane, "Boggle Game Rules", JOptionPane.INFORMATION_MESSAGE);
@@ -327,7 +349,7 @@ public class BoggleGame extends JFrame {
         } else {
             highestScorerLabel.setText("No scores available.");
         }
-    }    
+    }
 
     // intialize start menu
     private static void startMenu() {
@@ -335,14 +357,14 @@ public class BoggleGame extends JFrame {
         setButtonColors();
         modifyButtonFonts();
         setScore();
-       
+
         menuFrame = new JFrame("Boggle Menu");
         menuFrame.setLayout(new GridBagLayout());
         menuFrame.add(highestScorerLabel, gbc());
-        
+
         addActionListeners();
         addButtons();
-        
+
         menuFrame.setSize(600, 400);
         menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menuFrame.setLocationRelativeTo(null);

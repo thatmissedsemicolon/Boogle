@@ -91,7 +91,7 @@ public class BoggleBoard extends JPanel {
     }    
 
     // generate board -- modify to accomodate randomized letters *
-    private void generateBoard(JLabel currentWordDisplay) {
+    public void generateBoard(JLabel currentWordDisplay) {
         shuffleLetters();
         updateBoard();
         for (Component component : getComponents()) {

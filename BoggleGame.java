@@ -144,6 +144,7 @@ public class BoggleGame extends JFrame {
         this.inputField.setText("");
     }
 
+    // checks for the word if its already used
     private boolean isWordUsed(String word) {
         // Check if the word is already in the usedWordsArray
         for (int i = 0; i < usedWordsCount; i++) {
@@ -154,6 +155,7 @@ public class BoggleGame extends JFrame {
         return false;
     }
 
+    // checks for the word in the Boggle Dictionary 
     private boolean isWordInDictionary(String word, String dictionaryFileName) {
         boolean wordExists = false;
 
@@ -166,11 +168,12 @@ public class BoggleGame extends JFrame {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace(); // Handle or log the exception as needed
+            e.printStackTrace();
         }
         return wordExists;
     }
 
+    // reset the game
     private void resetGame() {
         this.boggleBoard.resetBoard();
         currentWordDisplay.setText("Current Word: ");
@@ -183,8 +186,11 @@ public class BoggleGame extends JFrame {
         // Reset used words array and count
         this.usedWordsArray = new String[100];
         this.usedWordsCount = 0;
+
+        boggleBoard.generateBoard(currentWordDisplay);
     }
 
+    // when game ends
     private void handleGameEnd() {
         ScoreManager.updateScore(userName, score);
 
@@ -202,6 +208,7 @@ public class BoggleGame extends JFrame {
         }
     }
 
+    // gets user name
     private static void getUserName() {
         while (userName.isEmpty()) {
             userName = JOptionPane.showInputDialog(null, "Please enter your name:");
@@ -277,6 +284,7 @@ public class BoggleGame extends JFrame {
         return gbc;
     }
 
+    // displays rules
     private static void displayRules(JFrame mainMenuFrame) {
         String rulesText = "RULES:\n\n(from https://www.wordplays.com/boggle)\n\n" +
                 "Boggle is a word game that requires 16 letter cubes similar to dice, but with letters. " +
@@ -304,6 +312,7 @@ public class BoggleGame extends JFrame {
         JOptionPane.showMessageDialog(menuFrame, scrollPane, "Boggle Game Rules", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // gets the score and sets it to the menu
     private static void setScore() {
         Map<String, Integer> allScores = ScoreManager.readScores();
         if (!allScores.isEmpty()) {
@@ -319,6 +328,7 @@ public class BoggleGame extends JFrame {
         }
     }    
 
+    // intialize start menu
     private static void startMenu() {
         initializeButtons();
         setButtonColors();

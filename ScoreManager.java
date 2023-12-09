@@ -4,12 +4,14 @@ import java.util.*;
 public class ScoreManager {
     private static final String SCORE_FILE = "scores.txt";
 
+    // create and updates the score in the file
     public static void updateScore(String userName, int newScore) {
         Map<String, Integer> scores = readScores();
         scores.put(userName, newScore);
         writeScores(scores);
     }
 
+    // reads all the scores from the file
     public static Map<String, Integer> readScores() {
         Map<String, Integer> scores = new HashMap<>();
         File file = new File(SCORE_FILE);
@@ -30,6 +32,7 @@ public class ScoreManager {
         return scores;
     }
 
+    // creates the scores.txt file
     private static void createNewScoreFile(File file) {
         try {
             file.createNewFile();
@@ -38,6 +41,7 @@ public class ScoreManager {
         }
     }
 
+    // write user score and name to the file
     public static void writeScores(Map<String, Integer> scores) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(SCORE_FILE))) {
             for (Map.Entry<String, Integer> entry : scores.entrySet()) {

@@ -146,18 +146,24 @@ public class BoggleGame extends JFrame {
 
     // calculate the word length score
     private int calculateWordScore(int wordLength) {
-        if (wordLength >= 3 && wordLength <= 4)
+        if (wordLength >= 3 && wordLength <= 4) {
             return 1; // 3-4-letter words are worth 1 point
-        else if (wordLength == 5)
+        }
+        else if (wordLength == 5) {
             return 2; // 5-letter words are worth 2 points
-        else if (wordLength == 6)
+        }
+        else if (wordLength == 6) {
             return 3; // 6-letter words are worth 3 points
-        else if (wordLength == 7)
+        }
+        else if (wordLength == 7) {
             return 5; // 7-letter words are worth 5 points
-        else if (wordLength >= 8)
+        }
+        else if (wordLength >= 8) {
             return 11; // words of 8+ letters are worth 11 points
-        else
+        }
+        else {
             return 0;
+        }
     }
 
     // checks for the word if its already used

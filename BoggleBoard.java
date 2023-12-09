@@ -13,15 +13,15 @@ public class BoggleBoard extends JPanel {
     private static final int NUM_ROWS = 4;
     private static final int NUM_COLS = 4;
 
-    private char[][] LETTERS = new char[][]{
-                {'A', 'B', 'C', 'D'},
-                {'E', 'F', 'G', 'H'},
-                {'I', 'J', 'K', 'L'},
-                {'M', 'N', 'O', 'P'},
-                {'Q', 'R', 'S', 'T'},
-                {'U', 'V', 'W', 'X'},
-                {'Y', 'Z'}
-            }; // English letters
+    private char[][] LETTERS = new char[][] {
+        {'A', 'B', 'C', 'D'},
+        {'E', 'F', 'G', 'H'},
+        {'I', 'J', 'K', 'L'},
+        {'M', 'N', 'O', 'P'},
+        {'Q', 'R', 'S', 'T'},
+        {'U', 'V', 'W', 'X'},
+        {'Y', 'Z'}
+    };
 
     private StringBuilder currentWord = new StringBuilder();
 
@@ -30,7 +30,20 @@ public class BoggleBoard extends JPanel {
         setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
 
         if (lang.equalsIgnoreCase("Spanish")) {
-            LETTERS[][]
+            char[][] newLetters = new char[LETTERS.length + 1][4]; // Create a new array with an additional row
+
+            // Copy existing letters to the new array
+            for (int i = 0; i < LETTERS.length; i++) {
+                for (int j = 0; j < LETTERS[i].length; j++) {
+                    newLetters[i][j] = LETTERS[i][j];
+                }
+            }
+            
+            // Add 'Ñ' to the last row
+            newLetters[LETTERS.length] = new char[] {'Ñ', '1', '2', '3'};
+            
+            // Assign the new array back to LETTERS
+            LETTERS = newLetters;            
         }
 
         generateBoard(currentWordDisplay);

@@ -13,41 +13,54 @@ public class BoggleBoard extends JPanel {
     private static final int NUM_ROWS = 4;
     private static final int NUM_COLS = 4;
 
-    private char[][] LETTERS = new char[][] {
-        {'A', 'B', 'C', 'D'},
-        {'E', 'F', 'G', 'H'},
-        {'I', 'J', 'K', 'L'},
-        {'M', 'N', 'O', 'P'},
-        {'Q', 'R', 'S', 'T'},
-        {'U', 'V', 'W', 'X'},
-        {'Y', 'Z'}
-    };
+    private char[][] LETTERS; // English letters
+    private String[][] SLETERS; // Spanish letters
 
     private StringBuilder currentWord = new StringBuilder();
 
-    
     // BoggleBoard constructor
     public BoggleBoard(JLabel currentWordDisplay, String lang) {
         setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
 
         if (lang.equalsIgnoreCase("Spanish")) {
-            char[][] newLetters = new char[LETTERS.length + 1][4];
+            SLETERS = new String[][]{
+                {"A", "B", "C", "D"},
+                {"E", "F", "G", "H"},
+                {"I", "J", "K", "L"},
+                {"M", "N", "O", "P"},
+                {"Q", "R", "S", "T"},
+                {"U", "V", "W", "X"},
+                {"Y", "Z", "h", "u"},
+                {"Ñ"}
+            };
 
-            // Coping existing letters to the new array
-            for (int i = 0; i < LETTERS.length; i++) {
-                for (int j = 0; j < LETTERS[i].length; j++) {
-                    newLetters[i][j] = LETTERS[i][j];
-                }
-            }
-            
-            // Adding 'Ñ' to the last row
-            newLetters[LETTERS.length] = new char[] {'Ñ', '1', '2', '3'};
-            
-            // Assign the new array back to LETTERS
-            LETTERS = newLetters;            
+            LETTERS = convertToChar(SLETERS);
+        } else {
+            LETTERS = new char[][]{
+                {'A', 'B', 'C', 'D'},
+                {'E', 'F', 'G', 'H'},
+                {'I', 'J', 'K', 'L'},
+                {'M', 'N', 'O', 'P'},
+                {'Q', 'R', 'S', 'T'},
+                {'U', 'V', 'W', 'X'},
+                {'Y', 'Z'}
+            };
         }
 
         generateBoard(currentWordDisplay);
+    }
+
+    // converts String to Char
+    private char[][] convertToChar(String[][] letters) {
+        char[][] convertedLetters = new char[letters.length][];
+        for (int i = 0; i < letters.length; i++) {
+            convertedLetters[i] = new char[letters[i].length];
+            for (int j = 0; j < letters[i].length; j++) {
+                convertedLetters[i][j] = letters[i][j].charAt(0);
+            }
+        }
+        
+        return convertedLetters;
     }
 
     // shuffles the letters (randomize)

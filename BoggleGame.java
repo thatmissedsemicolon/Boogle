@@ -218,20 +218,20 @@ public class BoggleGame extends JFrame {
     // when game ends
     private void handleGameEnd() {
         ScoreManager.updateScore(userName, score);
-
-        int playAgain = JOptionPane.showConfirmDialog
-            (null,
-                "Final Score: " + score + "\nPlay again?",
-                "Game Over! Time's up.", JOptionPane.YES_NO_OPTION
-            );
-            
+    
+        int playAgain = JOptionPane.showConfirmDialog(this, "Final Score: " + score + "\nPlay again?",
+            "Game Over! Time's up.",
+            JOptionPane.YES_NO_OPTION
+        );
+    
         if (playAgain == JOptionPane.YES_OPTION) {
-            getUserLang();
-        }
-        else {
+            // Dispose the current game window
+            this.dispose();
+            getUserLang(); // Start a new game
+        } else {
             System.exit(0);
         }
-    }
+    }    
 
     // gets user lang preference to play the game
     private static void getUserLang() {

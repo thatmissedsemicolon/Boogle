@@ -63,6 +63,8 @@ public class BoggleGame extends JFrame {
         JButton rotateButton = new JButton("Rotate");
         rotateButton.addActionListener(e -> boggleBoard.rotateLettersClockwise());
 
+
+        
         // button panel
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(submitButton);

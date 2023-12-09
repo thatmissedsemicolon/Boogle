@@ -81,11 +81,11 @@ public class BoggleBoard extends JPanel {
 
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                rotatedLetters[NUM_COLS - 1 - col][row] = LETTERS[row][col];
+                rotatedLetters[NUM_COLS - 1 - col][row] = ELETTERS[row][col];
             }
         }
 
-        LETTERS = rotatedLetters;
+        ELETTERS = rotatedLetters;
         updateBoard();
     }
 

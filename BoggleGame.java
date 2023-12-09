@@ -187,6 +187,7 @@ public class BoggleGame extends JFrame {
         this.usedWordsArray = new String[100];
         this.usedWordsCount = 0;
 
+        // Generates the new letters on the board
         boggleBoard.generateBoard(currentWordDisplay);
     }
 
